@@ -2,6 +2,8 @@ FROM pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime
 
 ARG MODEL_URL='https://huggingface.co/runwayml/stable-diffusion-v1-5/blob/main/v1-5-pruned-emaonly.ckpt'
 
+ARG EMBEDDING_URL='https://civitai.com/api/download/models/9208?type=Model&format=SafeTensor&size=full&fp=fp16'
+
 ARG HF_TOKEN=''
 
 RUN apt update && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install git wget \
@@ -27,11 +29,15 @@ ADD prepare.py .
 
 RUN python prepare.py --skip-torch-cuda-test --xformers --reinstall-torch --reinstall-xformers
 
+ADD download_embedding.py .
+
+RUN python download_embedding.py
+
 ADD download_checkpoint.py .
 
 RUN python download_checkpoint.py
 
-RUN pip install MarkupSafe==2.0.0 torchmetrics==0.11.4 triton
+RUN pip install MarkupSafe==2.1.1 torchmetrics==0.11.4 triton
 
 ADD download.py download.py
 RUN python download.py --use-cpu=all
