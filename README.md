@@ -76,6 +76,8 @@ print(result)
 
 ### Negative Embeddings
 
+To add Neagtive Embeddings, simply change the EMBEDDING_URL parameter in the Dockerfile to your own URL.
+
 WITHOUT negative embeddings called via negative prompt
 ![alt text](outputNoNE.jpg)
 
